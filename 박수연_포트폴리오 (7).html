@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>박수연 | 더 나은 미래를 향한 여정</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  :root{
+    --green:#ACCA69;
+    --blue:#69ACCA;
+    --green-deep:#7E9A45;
+    --blue-deep:#3F7C9E;
+    --bg:#FAFAF8;
+    --card:#FFFFFF;
+    --line:#E7E5DD;
+    --ink:#2B2B26;
+    --ink-soft:#6E6D63;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Pretendard',-apple-system,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.7;
+    overflow-x:hidden;
+    word-break:keep-all;
+    overflow-wrap:break-word;
+  }
+  body.page-active{overflow:hidden;}
+  ::selection{background:var(--green);color:#fff;}
+  img,svg{max-width:100%;}
+  button{font-family:inherit;cursor:pointer;background:none;border:none;}
+
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px;}
+
+  /* ---------- 편집 가능 텍스트 ---------- */
+  [contenteditable="true"]{
+    outline:none;border-radius:6px;padding:1px 4px;margin:-1px -4px;
+    transition:background .2s ease;
+    cursor:text;
+  }
+  [contenteditable="true"]:hover{background:rgba(172,202,105,.14);}
+  [contenteditable="true"]:focus{background:rgba(105,172,202,.16);box-shadow:0 0 0 1.5px var(--blue-deep);}
+
+  .edit-hint{
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:12px;color:var(--blue-deep);font-weight:600;
+    background:rgba(105,172,202,.12);border:1px solid rgba(105,172,202,.3);
+    padding:6px 14px;border-radius:20px;margin-bottom:28px;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:300;
+    background:rgba(250,250,248,.85);backdrop-filter:blur(10px);
+    border-bottom:1px solid transparent;
+    transition:border-color .3s ease;
+  }
+  header.scrolled{border-color:var(--line);}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;max-width:1080px;margin:0 auto;}
+  .logo{
+    font-weight:700;font-size:16px;letter-spacing:.02em;
+    background:none;border:none;padding:0;color:var(--ink);
+  }
+  .logo span{color:var(--green-deep);}
+
+  /* ---------- hero ---------- */
+  .hero{
+    min-height:88vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+    position:relative;padding:110px 24px 40px;
+  }
+  .orb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.35;z-index:0;}
+  .orb1{width:340px;height:340px;background:var(--green);top:8%;left:6%;animation:float1 9s ease-in-out infinite;}
+  .orb2{width:300px;height:300px;background:var(--blue);bottom:10%;right:6%;animation:float2 11s ease-in-out infinite;}
+  @keyframes float1{0%,100%{transform:translate(0,0);}50%{transform:translate(30px,20px);}}
+  @keyframes float2{0%,100%{transform:translate(0,0);}50%{transform:translate(-25px,-18px);}}
+
+  .hero-content{position:relative;z-index:1;}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:13px;font-weight:600;letter-spacing:.14em;color:var(--blue-deep);
+    background:#fff;border:1px solid var(--line);padding:7px 16px;border-radius:30px;
+    margin-bottom:28px;opacity:0;animation:fadeUp .8s ease forwards .1s;
+  }
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.8s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.5);opacity:.5;}}
+
+  h1.title{
+    font-size:clamp(30px,6vw,58px);font-weight:700;line-height:1.25;
+    background:linear-gradient(100deg,var(--green-deep),var(--blue-deep));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    opacity:0;animation:fadeUp .9s ease forwards .25s;
+  }
+  .subtitle{
+    margin-top:20px;font-size:clamp(15px,2vw,18px);color:var(--ink-soft);font-weight:500;
+    opacity:0;animation:fadeUp .9s ease forwards .4s;
+  }
+  .sprout{margin-top:8px;display:inline-block;font-size:22px;opacity:0;animation:fadeUp .9s ease forwards .55s, wiggle 3s ease-in-out infinite 1.4s;}
+  @keyframes wiggle{0%,100%{transform:rotate(-4deg);}50%{transform:rotate(4deg);}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+  /* ---------- 메인 4개 메뉴 카드 ---------- */
+  .menu-section{padding:20px 0 100px;}
+  .menu-head{text-align:center;margin-bottom:36px;}
+  .menu-head .tag{font-size:12.5px;font-weight:700;letter-spacing:.16em;color:var(--blue-deep);}
+  .menu-head h2{font-size:clamp(20px,3vw,26px);font-weight:700;margin-top:8px;}
+
+  .menu-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;}
+  .menu-card{
+    background:var(--card);border:1px solid var(--line);border-radius:22px;
+    padding:34px 24px;text-align:left;
+    display:flex;flex-direction:column;gap:16px;min-height:220px;
+    transition:transform .35s ease,box-shadow .35s ease,border-color .35s ease;
+    position:relative;overflow:hidden;
+  }
+  .menu-card::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:4px;
+    background:linear-gradient(90deg,var(--green),var(--blue));
+    transform:scaleX(0);transform-origin:left;transition:transform .4s ease;
+  }
+  .menu-card:hover{transform:translateY(-8px);box-shadow:0 26px 44px -30px rgba(62,90,40,.4);border-color:transparent;}
+  .menu-card:hover::before{transform:scaleX(1);}
+  .menu-icon{
+    width:50px;height:50px;border-radius:14px;
+    background:rgba(172,202,105,.18);display:flex;align-items:center;justify-content:center;color:var(--green-deep);
+    transition:transform .35s ease,background .35s ease,color .35s ease;
+  }
+  .menu-card:hover .menu-icon{background:linear-gradient(135deg,var(--green),var(--blue));color:#fff;transform:rotate(-8deg) scale(1.06);}
+  .menu-card h3{font-size:18px;font-weight:700;}
+  .menu-card p{font-size:13px;color:var(--ink-soft);flex:1;}
+  .menu-arrow{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--blue-deep);}
+  .menu-arrow svg{transition:transform .3s ease;}
+  .menu-card:hover .menu-arrow svg{transform:translateX(4px);}
+
+  @media(max-width:900px){.menu-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+  @media(max-width:560px){.menu-grid{grid-template-columns:1fr;}}
+
+  /* ---------- 전체화면 페이지 ---------- */
+  .page{
+    position:fixed;inset:0;z-index:400;background:var(--bg);
+    overflow-y:auto;opacity:0;pointer-events:none;transform:translateY(24px);
+    transition:opacity .4s ease,transform .4s ease;
+  }
+  .page.open{opacity:1;pointer-events:auto;transform:translateY(0);}
+  .page-inner{max-width:900px;margin:0 auto;padding:100px 28px 90px;}
+  .back-btn{
+    position:fixed;top:20px;left:24px;z-index:410;
+    display:flex;align-items:center;gap:8px;
+    background:#fff;border:1px solid var(--line);padding:10px 18px;border-radius:30px;
+    font-size:13.5px;font-weight:600;color:var(--ink);
+    transition:transform .25s ease,border-color .25s ease;
+  }
+  .back-btn:hover{transform:translateX(-3px);border-color:var(--green);}
+
+  .page-head{margin-bottom:36px;}
+  .page-head .tag{font-size:12.5px;font-weight:700;letter-spacing:.16em;color:var(--blue-deep);}
+  .page-head h2{font-size:clamp(24px,3.6vw,32px);font-weight:700;margin-top:10px;}
+
+  /* ---------- about ---------- */
+  .about-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:22px;align-items:stretch;}
+  .about-main{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:38px;}
+  .avatar{
+    width:64px;height:64px;border-radius:18px;
+    background:linear-gradient(135deg,var(--green),var(--blue));
+    display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:22px;
+    margin-bottom:22px;
+  }
+  .about-main h3{font-size:22px;font-weight:700;margin-bottom:6px;}
+  .about-main p.role{color:var(--ink-soft);font-size:14px;margin-bottom:20px;}
+  .kv{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid var(--line);font-size:14px;}
+  .kv:first-of-type{border-top:none;}
+  .kv b{color:var(--ink-soft);font-weight:500;flex:0 0 auto;}
+  .kv span{font-weight:600;text-align:right;}
+
+  .about-side{display:flex;flex-direction:column;gap:22px;}
+  .mini-card{
+    flex:1;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px;
+    display:flex;flex-direction:column;justify-content:center;text-align:center;
+  }
+  .mini-card .emoji{font-size:34px;margin-bottom:12px;}
+  .mini-card h4{font-size:13px;color:var(--ink-soft);font-weight:600;letter-spacing:.06em;margin-bottom:6px;}
+  .mini-card .val{font-size:19px;font-weight:700;}
+  @media(max-width:760px){.about-grid{grid-template-columns:1fr;}}
+
+  /* ---------- likes ---------- */
+  .card-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;}
+  .like-card{
+    background:var(--card);border:1px solid var(--line);border-radius:20px;padding:34px 26px;text-align:center;
+    position:relative;overflow:hidden;
+  }
+  .like-num{font-size:12.5px;font-weight:700;color:var(--blue-deep);letter-spacing:.12em;margin-bottom:16px;}
+  .like-icon{
+    width:56px;height:56px;border-radius:50%;margin:0 auto 18px;
+    background:rgba(172,202,105,.18);display:flex;align-items:center;justify-content:center;color:var(--green-deep);
+  }
+  .like-card h3{font-size:17px;font-weight:700;margin-bottom:8px;}
+  .like-card p{font-size:13.5px;color:var(--ink-soft);}
+  @media(max-width:760px){.card-row{grid-template-columns:1fr;}}
+
+  /* ---------- hobby & dream ---------- */
+  .hd-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .hd-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:32px;}
+  .hd-card h3{font-size:14px;font-weight:700;color:var(--blue-deep);letter-spacing:.06em;margin-bottom:18px;}
+  .pills{display:flex;flex-wrap:wrap;gap:10px;}
+  .pill{border:1px solid var(--line);padding:9px 16px;border-radius:30px;font-size:13.5px;font-weight:500;}
+  .path-row{display:flex;flex-direction:column;gap:16px;}
+  .path-row .item{display:flex;gap:14px;align-items:flex-start;}
+  .path-row .badge{
+    flex:0 0 auto;width:34px;height:34px;border-radius:10px;
+    background:rgba(105,172,202,.16);color:var(--blue-deep);
+    display:flex;align-items:center;justify-content:center;font-size:15px;
+  }
+  .path-row .item b{display:block;font-size:12px;color:var(--ink-soft);font-weight:600;margin-bottom:2px;}
+  .path-row .item span{font-size:15.5px;font-weight:700;display:inline-block;}
+  .path-row .item .path-desc{
+    display:block;margin-top:8px;font-size:13px;font-weight:400;color:var(--ink-soft);line-height:1.6;
+  }
+  @media(max-width:760px){.hd-grid{grid-template-columns:1fr;}}
+
+  /* ---------- contact ---------- */
+  .contact-wrap{
+    background:linear-gradient(135deg,var(--green-deep),var(--blue-deep));
+    border-radius:24px;padding:56px 40px;color:#fff;text-align:center;position:relative;overflow:hidden;
+  }
+  .contact-wrap::after{
+    content:'';position:absolute;inset:0;
+    background-image:radial-gradient(rgba(255,255,255,.12) 1px,transparent 1px);
+    background-size:22px 22px;opacity:.6;
+  }
+  .contact-wrap .page-head{position:relative;z-index:1;}
+  .contact-wrap .page-head h2{color:#fff;}
+  .contact-wrap .page-head .tag{color:rgba(255,255,255,.85);}
+  .contact-wrap .lead{color:rgba(255,255,255,.85);position:relative;z-index:1;margin-top:8px;}
+  .contact-cards{position:relative;z-index:1;margin-top:34px;display:flex;justify-content:center;flex-wrap:wrap;gap:16px;}
+  .contact-card{
+    background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+    border-radius:16px;padding:18px 26px;display:flex;align-items:center;gap:12px;
+    color:#fff;min-width:230px;justify-content:flex-start;
+    transition:transform .3s ease,background .3s ease;
+  }
+  .contact-card:hover{transform:translateY(-5px);background:rgba(255,255,255,.2);}
+  .contact-card .c-icon{
+    width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.18);
+    display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+  }
+  .contact-card .c-text b{display:block;font-size:11.5px;opacity:.75;font-weight:500;letter-spacing:.05em;}
+  .contact-card .c-text span{font-size:14.5px;font-weight:600;}
+
+  footer{text-align:center;padding:40px 24px;color:var(--ink-soft);font-size:12.5px;}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="nav">
+    <button class="logo" onclick="showHome()">박수연<span>.</span></button>
+  </div>
+</header>
+
+<!-- HOME -->
+<div id="screen-home">
+  <section class="hero">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="hero-content">
+      <p class="eyebrow"><span class="dot"></span>PORTFOLIO</p>
+      <h1 class="title" data-save="hero-title">더 나은 미래를 향한 여정</h1>
+      <p class="subtitle" data-save="hero-subtitle">조금씩 성장해나가는 새싹</p>
+      <div class="sprout">🌱</div>
+    </div>
+  </section>
+
+  <section class="menu-section">
+    <div class="wrap">
+      <div class="menu-head">
+        <p class="tag">MENU</p>
+        <h2>어떤 이야기가 궁금하신가요?</h2>
+      </div>
+      <div class="menu-grid">
+
+        <button class="menu-card" onclick="showScreen('about')">
+          <div class="menu-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+          </div>
+          <h3>About Me</h3>
+          <p>이름, 나를 표현하는 단어, MBTI</p>
+          <span class="menu-arrow">자세히 보기 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </button>
+
+        <button class="menu-card" onclick="showScreen('likes')">
+          <div class="menu-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 8.6c0-2.6-2.1-4.6-4.6-4.6-1.6 0-3 .8-3.8 2-.8-1.2-2.2-2-3.8-2-2.6 0-4.6 2-4.6 4.6 0 5 8.4 10.4 8.4 10.4s8.4-5.4 8.4-10.4z"/></svg>
+          </div>
+          <h3>좋아하는 것</h3>
+          <p>드럼 연주, 독서, 영화 감상</p>
+          <span class="menu-arrow">자세히 보기 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </button>
+
+        <button class="menu-card" onclick="showScreen('hobby')">
+          <div class="menu-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15 9l-2 5-5 2 2-5z"/></svg>
+          </div>
+          <h3>Hobby &amp; Dream</h3>
+          <p>취미, 관심 분야, 장래 희망</p>
+          <span class="menu-arrow">자세히 보기 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </button>
+
+        <button class="menu-card" onclick="showScreen('contact')">
+          <div class="menu-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg>
+          </div>
+          <h3>Contact</h3>
+          <p>이메일, 인스타그램</p>
+          <span class="menu-arrow">자세히 보기 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </button>
+
+      </div>
+    </div>
+  </section>
+
+  <footer>&copy; 박수연 Portfolio</footer>
+</div>
+
+<!-- ABOUT PAGE -->
+<div class="page" id="screen-about">
+  <button class="back-btn" onclick="showHome()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    나가기
+  </button>
+  <div class="page-inner">
+    <div class="page-head">
+      <p class="tag">ABOUT ME</p>
+      <h2 data-save="about-h2">저를 소개합니다</h2>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-main">
+        <div class="avatar" data-save="about-avatar">박</div>
+        <h3 data-save="about-name">박수연</h3>
+        <p class="role" data-save="about-role">더 나은 미래를 향해 걸어가는 중</p>
+        <div class="kv"><b>이름</b><span data-save="about-kv-name">박수연</span></div>
+        <div class="kv"><b>나를 표현하는 단어</b><span data-save="about-kv-word">🐢 거북이</span></div>
+        <div class="kv"><b>MBTI</b><span data-save="about-kv-mbti">INTJ</span></div>
+      </div>
+
+      <div class="about-side">
+        <div class="mini-card">
+          <div class="emoji">🐢</div>
+          <h4>KEYWORD</h4>
+          <div class="val" data-save="about-mini-word">거북이처럼, 꾸준하게</div>
+        </div>
+        <div class="mini-card">
+          <div class="emoji">🧭</div>
+          <h4>MBTI</h4>
+          <div class="val" data-save="about-mini-mbti">INTJ</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LIKES PAGE -->
+<div class="page" id="screen-likes">
+  <button class="back-btn" onclick="showHome()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    나가기
+  </button>
+  <div class="page-inner">
+    <div class="page-head">
+      <p class="tag">WHAT I LOVE</p>
+      <h2 data-save="likes-h2">좋아하는 것 3가지</h2>
+    </div>
+
+    <div class="card-row">
+      <div class="like-card">
+        <p class="like-num">01</p>
+        <div class="like-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="8" rx="8" ry="4"/><path d="M4 8v8c0 2.2 3.6 4 8 4s8-1.8 8-4V8"/><path d="M5 6l-2-3M19 6l2-3"/></svg>
+        </div>
+        <h3 data-save="likes-1-title">드럼 연주하기</h3>
+        <p data-save="likes-1-desc">리듬 속에서 에너지를 얻습니다.</p>
+      </div>
+      <div class="like-card">
+        <p class="like-num">02</p>
+        <div class="like-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+        </div>
+        <h3 data-save="likes-2-title">독서하기</h3>
+        <p data-save="likes-2-desc">다양한 삶의 방식을 통해 생각을 넓힙니다.</p>
+      </div>
+      <div class="like-card">
+        <p class="like-num">03</p>
+        <div class="like-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 5v14M17 5v14M3 9h4M3 15h4M17 9h4M17 15h4"/></svg>
+        </div>
+        <h3 data-save="likes-3-title">영화 감상하기</h3>
+        <p data-save="likes-3-desc">인물의 입장이 되어보는 시간을 좋아합니다.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOBBY & DREAM PAGE -->
+<div class="page" id="screen-hobby">
+  <button class="back-btn" onclick="showHome()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    나가기
+  </button>
+  <div class="page-inner">
+    <div class="page-head">
+      <p class="tag">HOBBY &amp; DREAM</p>
+      <h2 data-save="hobby-h2">취미와 꿈</h2>
+    </div>
+
+    <div class="hd-grid">
+      <div class="hd-card">
+        <h3>HOBBY</h3>
+        <div class="path-row">
+          <div class="item">
+            <div class="badge">🎧</div>
+            <div>
+              <b>취미 1</b>
+              <span data-save="hobby-item-1">음악 듣기</span>
+              <p class="path-desc" data-save="hobby-item-1-desc">다양한 장르의 음악을 들으며 마음을 차분하게 정리하는 시간을 좋아합니다.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="badge">📖</div>
+            <div>
+              <b>취미 2</b>
+              <span data-save="hobby-item-2">독서하기</span>
+              <p class="path-desc" data-save="hobby-item-2-desc">인문/사회 분야의 책을 즐겨 읽으며 세상을 보는 시야를 넓혀갑니다.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="badge">🥁</div>
+            <div>
+              <b>취미 3</b>
+              <span data-save="hobby-item-3">드럼 연주하기</span>
+              <p class="path-desc" data-save="hobby-item-3-desc">리듬을 타며 스트레스를 풀고 집중력을 높이는 저만의 방법입니다.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hd-card">
+        <h3>PATH</h3>
+        <div class="path-row">
+          <div class="item">
+            <div class="badge">🎓</div>
+            <div>
+              <b>관심 분야</b>
+              <span data-save="hobby-path-1">인문 · 사회 계열</span>
+              <p class="path-desc" data-save="hobby-path-1-desc">사람과 사회가 맺는 관계, 그 안의 다양한 목소리에 관심이 많습니다. 역사와 사회 현상을 통해 지금의 세상을 이해하는 것을 좋아합니다.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="badge">🏫</div>
+            <div>
+              <b>장래 희망</b>
+              <span data-save="hobby-path-2">사회 교사</span>
+              <p class="path-desc" data-save="hobby-path-2-desc">경청하는 태도로 학생 한 명 한 명의 이야기에 귀 기울이며, 사회를 함께 읽어가는 선생님이 되고 싶습니다. 교실 안에서 다양한 생각이 자유롭게 오갈 수 있는 분위기를 만들고 싶습니다.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT PAGE -->
+<div class="page" id="screen-contact">
+  <button class="back-btn" onclick="showHome()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    나가기
+  </button>
+  <div class="page-inner">
+    <div class="contact-wrap">
+      <div class="page-head">
+        <p class="tag">CONTACT</p>
+        <h2 data-save="contact-h2">함께 이야기 나눠요</h2>
+      </div>
+      <p class="lead" data-save="contact-lead">궁금한 점이 있다면 언제든 편하게 연락해주세요.</p>
+      <div class="contact-cards">
+        <div class="contact-card" onclick="handleContactClick(event,'email')" style="cursor:pointer;">
+          <div class="c-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg>
+          </div>
+          <div class="c-text"><b>EMAIL</b><span data-save="contact-email">paksuyeon10@gmail.com</span></div>
+        </div>
+        <div class="contact-card" onclick="handleContactClick(event,'insta')" style="cursor:pointer;">
+          <div class="c-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+          </div>
+          <div class="c-text"><b>INSTAGRAM</b><span data-save="contact-insta">@soyp_51</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', ()=>{
+    header.classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  function handleContactClick(e, type){
+    const card = e.currentTarget;
+    const span = card.querySelector('[data-save]');
+    let text = span.innerText.trim();
+    if(type === 'email'){
+      window.location.href = 'mailto:' + text;
+    } else if(type === 'insta'){
+      text = text.replace(/^@/, '');
+      window.open('https://instagram.com/' + text, '_blank');
+    }
+  }
+
+  function showScreen(name){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('open'));
+    document.getElementById('screen-'+name).classList.add('open');
+    document.body.classList.add('page-active');
+    document.getElementById('screen-'+name).scrollTop = 0;
+  }
+  function showHome(){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('open'));
+    document.body.classList.remove('page-active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  document.querySelectorAll('[data-save]').forEach(el=>{
+    try{
+      const key = 'psy_' + el.getAttribute('data-save');
+      const saved = localStorage.getItem(key);
+      if(saved !== null){ el.innerText = saved; }
+      el.addEventListener('input', ()=>{
+        try{ localStorage.setItem(key, el.innerText); }catch(e){}
+      });
+    }catch(e){}
+  });
+</script>
+
+</body>
+</html>
